@@ -90,6 +90,10 @@ class InputService : AccessibilityService() {
                 Log.d(logTag,"delta:$delta")
                 if (delta > 8) {
                     isWaitingLongPress = false
+                }else{
+                    createGesture(mouseX, mouseY)
+                    isWaitingLongPress = false
+                    leftIsDown = false
                 }
             }
         }
@@ -102,7 +106,8 @@ class InputService : AccessibilityService() {
                     if (isWaitingLongPress) {
                         isWaitingLongPress = false
                         leftIsDown = false
-                        endGesture(mouseX, mouseY)
+                       // endGesture(mouseX, mouseY)
+                        createGesture(mouseX, mouseY)
                     }
                 }
             }, LONG_TAP_DELAY * 4)
@@ -120,6 +125,11 @@ class InputService : AccessibilityService() {
         // left up ,was down
         if (mask == LIFT_UP) {
             if (leftIsDown) {
+                leftIsDown = false
+                isWaitingLongPress = false
+                endGesture(mouseX, mouseY)
+                return
+            }else{
                 leftIsDown = false
                 isWaitingLongPress = false
                 endGesture(mouseX, mouseY)
@@ -268,7 +278,27 @@ class InputService : AccessibilityService() {
             Log.e(logTag, "endGesture error:$e")
         }
     }
-
+//按下
+    @RequiresApi(Build.VERSION_CODES.N)
+   private fun createGesture(x: Int, y: Int) {
+    try {
+        val path = Path()
+        path.moveTo(x.toFloat(), y.toFloat())
+        val stroke = GestureDescription.StrokeDescription(
+            path,
+            0,
+            1000,
+            true
+        )
+        val builder = GestureDescription.Builder()
+        builder.addStroke(stroke)
+        Log.d(logTag, "create gesture x:$x y:$y")
+        dispatchGesture(builder.build(), null, null)
+    } catch (e: Exception) {
+        Log.e(logTag, "createGesture error:$e")
+    }
+   }
+  
     @RequiresApi(Build.VERSION_CODES.N)
     fun onKeyEvent(data: ByteArray) {
         val keyEvent = KeyEvent.parseFrom(data)
