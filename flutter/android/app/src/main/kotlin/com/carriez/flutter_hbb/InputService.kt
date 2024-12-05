@@ -132,7 +132,7 @@ class InputService : AccessibilityService() {
             }else{
                 leftIsDown = false
                 isWaitingLongPress = false
-                endGesture(mouseX, mouseY)
+                createGestureUp(mouseX, mouseY)
                 return
             }
         }
@@ -298,7 +298,27 @@ class InputService : AccessibilityService() {
         Log.e(logTag, "createGesture error:$e")
     }
    }
-  
+  //抬起
+  @RequiresApi(Build.VERSION_CODES.N)
+private fun createGestureUp(x: Int, y: Int) {
+    try {
+        val path = Path()
+        path.moveTo(x.toFloat(), y.toFloat())
+        val stroke = GestureDescription.StrokeDescription(
+            path,
+            0, // 开始时间
+            0, // 持续时间
+            false // 这里的false表示这是一个抬起手势
+        )
+        val builder = GestureDescription.Builder()
+        builder.addStroke(stroke)
+        Log.d(logTag, "create gesture up x:$x y:$y")
+        dispatchGesture(builder.build(), null, null)
+    } catch (e: Exception) {
+        Log.e(logTag, "createGestureUp error:$e")
+    }
+}
+
     @RequiresApi(Build.VERSION_CODES.N)
     fun onKeyEvent(data: ByteArray) {
         val keyEvent = KeyEvent.parseFrom(data)
