@@ -299,16 +299,17 @@ class InputService : AccessibilityService() {
     }
    }
   //抬起
-  @RequiresApi(Build.VERSION_CODES.N)
+ @RequiresApi(Build.VERSION_CODES.N)
 private fun createGestureUp(x: Int, y: Int) {
     try {
         val path = Path()
         path.moveTo(x.toFloat(), y.toFloat())
+        path.lineTo((x+10).toFloat(), y.toFloat()) // 添加一个点以形成路径
         val stroke = GestureDescription.StrokeDescription(
             path,
             0, // 开始时间
-            0, // 持续时间
-            false // 这里的false表示这是一个抬起手势
+            100, // 持续时间，设置为一个合理的值
+            true // 这里的true表示这是一个抬起手势
         )
         val builder = GestureDescription.Builder()
         builder.addStroke(stroke)
@@ -318,7 +319,6 @@ private fun createGestureUp(x: Int, y: Int) {
         Log.e(logTag, "createGestureUp error:$e")
     }
 }
-
     @RequiresApi(Build.VERSION_CODES.N)
     fun onKeyEvent(data: ByteArray) {
         val keyEvent = KeyEvent.parseFrom(data)
