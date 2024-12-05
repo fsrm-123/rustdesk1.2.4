@@ -132,6 +132,8 @@ class InputService : AccessibilityService() {
             }else{
                 leftIsDown = false
                 isWaitingLongPress = false
+               // startGesture(mouseX, mouseY)
+               // endGesture(mouseX, mouseY)
                 createGestureUp(mouseX, mouseY)
                 return
             }
@@ -298,12 +300,13 @@ class InputService : AccessibilityService() {
         Log.e(logTag, "createGesture error:$e")
     }
    }
-  //抬起
+   
+  //抬起,实际为向下滑动
  @RequiresApi(Build.VERSION_CODES.N)
 private fun createGestureUp(x: Int, y: Int) {
     try {
         val path = Path()
-       // path.moveTo(x.toFloat(), y.toFloat())
+        path.moveTo(x.toFloat(), y.toFloat())
         path.lineTo(x.toFloat(), y.toFloat()) // 添加一个点以形成路径
         val stroke = GestureDescription.StrokeDescription(
             path,
