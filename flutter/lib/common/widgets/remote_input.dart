@@ -167,7 +167,7 @@ class _RawTouchGestureDetectorRegionState
       ffi.cursorModel
           .move(_cacheLongPressPosition.dx, _cacheLongPressPosition.dy);
     }
-    inputModel.tap(MouseButtons.right);
+    //inputModel.tap(MouseButtons.right);
   }
 
   onDoubleFinerTapDown(TapDownDetails d) {
