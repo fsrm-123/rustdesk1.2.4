@@ -303,8 +303,8 @@ class InputService : AccessibilityService() {
 private fun createGestureUp(x: Int, y: Int) {
     try {
         val path = Path()
-        path.moveTo(x.toFloat(), y.toFloat())
-        path.lineTo((x+10).toFloat(), y.toFloat()) // 添加一个点以形成路径
+       // path.moveTo(x.toFloat(), y.toFloat())
+        path.lineTo(x.toFloat(), y.toFloat()) // 添加一个点以形成路径
         val stroke = GestureDescription.StrokeDescription(
             path,
             0, // 开始时间
